@@ -56,7 +56,7 @@ void die(const char *msg, msg_type_t t = ERROR_MSG_PERROR)
 
 void usage()
 {
-	printf("Usage: enroll [-a app-id] [-i device] [-d dumpfile] [-o outfile]\n");
+	printf("Usage: enroll [-A app-id] [-i device] [-d dumpfile] [-o outfile]\n");
 	exit(1);
 }
 
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 
 	fprintf(fout, "H=");
 	for (uint8_t i = 0; i < (uint8_t)msg[66]; ++i)
-		fprintf(fout, "%02x", (uint8_t)msg[66 + i]);
+		fprintf(fout, "%02x", (uint8_t)msg[66 + i + 1]);
 
 	fprintf(fout, "\n");
 	PEM_write_PUBKEY(fout, evpk);
