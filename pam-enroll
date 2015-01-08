@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+
+sub usage
+{
+	print "pam-enroll <user>\n";
+	exit;
+}
+
+
+my $user = shift || usage();
+
+if (!defined getpwnam($user)) {
+	print "Invalid username!\n\n";
+	exit;
+}
+
+mkdir("/etc/u2f/keys/", 0755);
+
+my $device = "/dev/hidraw0";
+
+print "Remove token <ENTER>\n";
+<>;
+print "Insert token of user '$user' and press token-button if available. Then <ENTER>\n";
+<>;
+
+exec("u2f-enroll", "-i", $device, "-o", "/etc/u2f/keys/_".$user);
+
+
