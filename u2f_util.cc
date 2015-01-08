@@ -26,7 +26,7 @@
 #define strdup _strdup
 #endif
 
-#ifdef __OS_MAC
+#ifdef __OS_DARWIN
 // Implement something compatible w/ linux clock_gettime()
 
 #include <mach/mach_time.h>
