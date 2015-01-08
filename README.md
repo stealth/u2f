@@ -76,7 +76,11 @@ Certificate:
 
 ```
 
-The public key along with the keyhandle has then been stored in `/etc/u2f/keys`:
+If `/dev/hidraw0` is not the right device for you, adjust the device path inside
+`pam-enroll`. You can also enroll keys via `u2f-enroll` and store the keys
+manually.
+
+`pam-enroll` stores the key handle along with the public key in `/etc/u2f/keys`:
 
 ```
 localhost:# cat /etc/u2f/keys/_stealth
@@ -107,7 +111,16 @@ session  include        common-session
 Next time someone logs in via _xdm_ an u2f token is required, which
 must contain the private key belonging to the public part
 stored in `/etc/u2f/keys`. Note that users which are not enrolled
-via `pam-enroll` cannot longer login via _xdm_!
+via `pam-enroll` cannot longer login via _xdm_! __So be sure that
+_root_ is properly enrolled__.
+
+If you have an USB keyboard or any other HID devices besides the u2f token
+already attached, you may need to specify the device path in the _PAM_
+file, as in:
+
+    auth     required       pam_fido-u2f.so	device=/dev/hidraw1
+
+for example. As whatever name it would show up once plugged in.
 
 
 u2f limitations
