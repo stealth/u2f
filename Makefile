@@ -62,5 +62,6 @@ u2f-sign: sign.o u2f_util.o $(HIDAPI)
 install:
 	cp u2f-sign /usr/local/bin
 	cp u2f-enroll /usr/local/bin
+	cp pam-enroll /usr/local/bin
 	cp pam_fido-u2f.so /lib64/security
 
