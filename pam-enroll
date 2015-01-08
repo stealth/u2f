@@ -15,6 +15,7 @@ if (!defined getpwnam($user)) {
 	exit;
 }
 
+mkdir("/etc/u2f", 0755);
 mkdir("/etc/u2f/keys/", 0755);
 
 my $device = "/dev/hidraw0";
