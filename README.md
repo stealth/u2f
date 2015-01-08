@@ -2,12 +2,12 @@ U2F utils
 =========
 
 This u2f toolset contains small footprint u2f tools for enrolling
-and signing operations as well as a PAM module for authenticating
+and signing operations as well as a _PAM_ module for authenticating
 users on local services where they can physically plug in the
-u2f token (e.g. xdm, login, su, ...).
+u2f token (i.e. _xdm_, _login_, _su_, ...).
 
 I wrote this u2f stack in order to get familar with u2f crypto, the
-shortcomings of u2f in general and weaknesses of other u2f-stacks in
+shortcomings of u2f in general and weaknesses of other u2f stacks in
 particular. Remote tools for u2f ssh etc. are underway.
 
 Build
@@ -30,7 +30,7 @@ Install
 -------
 
 To enroll a key you either use `u2f-enroll` or `pam-enroll`
-if you want to enroll a key suitable for PAM authentication:
+if you want to enroll a key suitable for _PAM_ authentication:
 
 ```
 localhost: # pam-enroll stealth
@@ -84,13 +84,14 @@ H=b67350 [...] 18273a626dc0743c
 -----BEGIN PUBLIC KEY-----
 MIIBSzCCAQMGByqGSM49AgEwgfcCAQEwLAYHKoZIzj0BAQIhAP////8AAAABAAAA
 [...]
+
 [...]
 SLI/caIDeYpo3lRlEdIWUX87A1cWC3YpCPJ89G1Hc9Fb9TtELXRiP3tHSfhgyVU=
 -----END PUBLIC KEY-----
 ```
 
-You can then add `pam_fido-u2f.so` to any pam service file (only
-local services) for example to the xdm display manager:
+You can then add `pam_fido-u2f.so` to any _PAM_ service file (only
+local services) for example to the _xdm_ display manager:
 
 ```
 localhost: # cat /etc/pam.d/xdm
@@ -103,10 +104,10 @@ session  required       pam_loginuid.so
 session  include        common-session
 ```
 
-Next time someone logs in via xdm, a u2f token is required which
-has to contain the private key belonging to the public part
+Next time someone logs in via _xdm_ an u2f token is required, which
+must contain the private key belonging to the public part
 stored in `/etc/u2f/keys`. Note that users which are not enrolled
-via `pam-enroll` cannot longer login via xdm!
+via `pam-enroll` cannot longer login via _xdm_!
 
 
 u2f limitations
@@ -115,7 +116,7 @@ u2f limitations
 Please note that 2FA tokens/mechanisms are of limited use to protect
 shell access, since there are many ways to plant 2FA-less backdoors once
 shell access has been gained by an attacker in the first place.
-Proper gateway and VPN setup is mandatory in order for 2FA to provide a
+A Proper gateway and VPN setup is mandatory in order for 2FA to provide a
 real security benefit. __Also note that the FIDO U2F standard chose a
 NIST ECC curve (NIST P-256 aka `NID_X9_62_prime256v1`) for the crypto
 operations.__ Yes, thats the same NIST that apparently already backdoored other 
