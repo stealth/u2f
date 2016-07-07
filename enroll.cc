@@ -119,10 +119,12 @@ int main(int argc, char **argv)
 		}
 	}
 
-	SSL_library_init();
-	SSL_load_error_strings();
+	ERR_load_crypto_strings();
 	OpenSSL_add_all_algorithms();
 	OpenSSL_add_all_digests();
+
+	RAND_load_file("/dev/urandom", 256);
+	ERR_clear_error();
 
 	// the string blob the APDU returns for a registration message
 	string msg = "";

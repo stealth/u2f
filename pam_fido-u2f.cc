@@ -301,7 +301,6 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, cons
 	// only local supported yet
 	int local_device = 1;
 
-	SSL_library_init();
 	OpenSSL_add_all_algorithms();
 	OpenSSL_add_all_digests();
 

@@ -7,8 +7,8 @@ SSL=/usr/local/ssl
 CXX=c++
 CC=cc
 
-#LDFLAGS=-Wl,$(SSL)/lib/libcrypto.so -Wl,$(SSL)/lib/libssl.so
-LDFLAGS=-Wl,-L$(SSL)/lib -lssl -lcrypto
+#LDFLAGS=-lcrypto
+LDFLAGS=-L$(SSL)/lib -Wl,--rpath=$(SSL)/lib -lcrypto
 CFLAGS=-I$(SSL)/include
 
 CFLAGS+=-fPIC -c -O2
@@ -38,7 +38,7 @@ hid.o: hidapi/mac/hid.c
 endif  # Darwin
 
 pam: pam_fido-u2f.o
-	$(CXX) -shared $(LDFLAGS) -lpam $^ -o pam_fido-u2f.so
+	$(CXX) $^ -shared $(LDFLAGS) -lpam -o pam_fido-u2f.so
 
 pam_fido-u2f.o: pam_fido-u2f.cc
 	$(CXX) $(CFLAGS) $<
@@ -53,7 +53,7 @@ sign.o: sign.cc
 	$(CXX) $(CFLAGS) $<
 
 u2f-enroll: enroll.o u2f_util.o $(HIDAPI)
-	$(CXX) $(LDFLAGS) -lrt -ludev -o $@ $^
+	$(CXX) $^ $(LDFLAGS) -lrt -ludev -o $@
 
 u2f-sign: sign.o u2f_util.o $(HIDAPI)
 	$(CXX) $(LDFLAGS) -lrt -ludev -o $@ $^
@@ -64,4 +64,8 @@ install:
 	cp u2f-enroll /usr/local/bin
 	cp pam-enroll /usr/local/bin
 	cp pam_fido-u2f.so /lib64/security
+
+clean:
+	rm -rf *.o
+
 
