@@ -53,7 +53,7 @@ using namespace std;
 
 
 struct apdu_blob_t {
-	//uint8_t ctrl; Not here; sent directly as P3
+	//uint8_t ctrl; Not here; sent directly as P1 (0x3 == "enforce-user-presence-and-sign")
 	unsigned char chall[32];
 	unsigned char app[32];
 	uint8_t kl;
