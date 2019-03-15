@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Sebastian Krahmer.
+ * Copyright (C) 2015-2019 Sebastian Krahmer.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,7 +67,8 @@ enum msg_type_t {
 
 
 enum sw_t {
-	SW_OK	= 0x9000
+	SW_OK	= 0x9000,
+	SW_CONDITIONS_NOT_SATISFIED = 0x6985
 };
 
 
@@ -134,10 +135,10 @@ int main(int argc, char **argv)
 		if ((dev = U2Fob_create()) == NULL)
 			die("U2Fob_create");
 
-		if (U2Fob_open(dev, "/dev/hidraw0") != 0)
-			die("U2Fob_open");
+		if (U2Fob_open(dev, infile.c_str()) != 0)
+			die("U2Fob_open: Wrong device? ");
 		if (U2Fob_init(dev) != 0)
-			die("U2Fob_init");
+			die("U2Fob_init: Wrong device? ");
 
 		int sw = 0;
 
@@ -147,9 +148,14 @@ int main(int argc, char **argv)
 			die("RAND_bytes", ERROR_MSG_SSL);
 
 		string s = string(reinterpret_cast<char *>(req), sizeof(req));
-		if ((sw = U2Fob_apdu(dev, 0x0, U2F_INS_REGISTER, 0x1, 0, s, &msg)) != SW_OK) {
-			fprintf(stderr, "Failure on APDU (sw=%x)\n", sw);
-			die("U2Fob_apdu");
+		if ((sw = U2Fob_apdu(dev, 0x0, U2F_INS_REGISTER, 0x0, 0, s, &msg)) != SW_OK) {
+			if (sw == SW_CONDITIONS_NOT_SATISFIED) {
+				fprintf(stderr, "Do the user-presence test and call command again shortly after that.\n");
+				exit(0);
+			} else {
+				fprintf(stderr, "Failure on APDU (sw=%x)\n", sw);
+				die("U2Fob_apdu");
+			}
 		}
 		U2Fob_destroy(dev);
 		printf("Got %d bytes (sw=%x)\n", (int)msg.size(), sw);

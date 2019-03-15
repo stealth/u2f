@@ -3,12 +3,13 @@
 
 sub usage
 {
-	print "pam-enroll <user>\n";
+	print "pam-enroll <user> [device]\n";
 	exit;
 }
 
 
 my $user = shift || usage();
+my $device = shift || "/dev/hidraw0";
 
 if (!defined getpwnam($user)) {
 	print "Invalid username!\n\n";
@@ -17,8 +18,6 @@ if (!defined getpwnam($user)) {
 
 mkdir("/etc/u2f", 0755);
 mkdir("/etc/u2f/keys/", 0755);
-
-my $device = "/dev/hidraw0";
 
 print "Remove token <ENTER>\n";
 <>;

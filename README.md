@@ -15,12 +15,16 @@ Build
 
 Inside this dir,
 
-	$ git clone https://github.com/signal11/hidapi
+```
+$ git clone https://github.com/signal11/hidapi
+```
 
 to get the HIDAPI for accessing the security token. Then:
 
-	$ make
-	$ make install
+```
+$ make
+$ make install
+```
 
 You need to set up proper udev rules so the security token
 appears as `/dev/hidraw*` device, with the permissions you prefer
@@ -76,9 +80,9 @@ Certificate:
 
 ```
 
-If `/dev/hidraw0` is not the right device for you, adjust the device path inside
-`pam-enroll`. You can also enroll keys via `u2f-enroll` and store the keys
-manually.
+If `/dev/hidraw0` is not the right device for you, pass the device path as the
+second argument of `pam-enroll`. You can also enroll keys via `u2f-enroll` and
+store the keys manually.
 
 `pam-enroll` stores the key handle along with the public key in `/etc/u2f/keys`:
 
@@ -132,7 +136,7 @@ shell access has been gained by an attacker in the first place.
 A Proper gateway and VPN setup is mandatory in order for 2FA to provide a
 real security benefit. __Also note that the FIDO U2F standard chose a
 NIST ECC curve (NIST P-256 aka `NID_X9_62_prime256v1`) for the crypto
-operations.__ Yes, thats the same NIST that apparently already backdoored other 
+operations.__ Yes, thats the same NIST that apparently already backdoored other
 crypto protocols. So you can consider `NID_X9_62_prime256v1` to be weak,
 but it might be good enough as a second factor for medium secured sites.
 Note again that USB tokens are subject to bad-USB style attacks. Some tokens
