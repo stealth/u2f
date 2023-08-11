@@ -3,11 +3,12 @@ all: u2f-enroll u2f-sign pam
 
 UNAME := $(shell uname)
 
-SSL=/usr/local/ssl
+#your own libcrypto install
+#SSL=/usr/local/ssl
 CXX=c++
 CC=cc
 
-#LDFLAGS=-lcrypto
+LDFLAGS=-lcrypto
 LDFLAGS=-L$(SSL)/lib -Wl,--rpath=$(SSL)/lib -lcrypto
 CFLAGS=-I$(SSL)/include
 
@@ -37,26 +38,28 @@ hid.o: hidapi/mac/hid.c
 
 endif  # Darwin
 
+CXXFLAGS=$(CFLAGS) -std=c++11
+
 pam: pam_fido-u2f.o
 	$(CXX) $^ -shared $(LDFLAGS) -lpam -o pam_fido-u2f.so
 
 pam_fido-u2f.o: pam_fido-u2f.cc
-	$(CXX) $(CFLAGS) $<
+	$(CXX) $(CXXFLAGS) $<
 
 u2f_util.o: u2f_util.cc u2f_util.h u2f.h u2f_hid.h
-	$(CXX) $(CFLAGS) -o $@ u2f_util.cc
+	$(CXX) $(CXXFLAGS) -o $@ u2f_util.cc
 
 enroll.o: enroll.cc
-	$(CXX) $(CFLAGS) $<
+	$(CXX) $(CXXFLAGS) $<
 
 sign.o: sign.cc
-	$(CXX) $(CFLAGS) $<
+	$(CXX) $(CXXFLAGS) $<
 
 u2f-enroll: enroll.o u2f_util.o $(HIDAPI)
 	$(CXX) $^ $(LDFLAGS) -lrt -ludev -o $@
 
 u2f-sign: sign.o u2f_util.o $(HIDAPI)
-	$(CXX) $(LDFLAGS) -lrt -ludev -o $@ $^
+	$(CXX) $^ $(LDFLAGS) -lrt -ludev -o $@
 
 
 install:

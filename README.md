@@ -13,6 +13,8 @@ particular. Remote tools for u2f ssh etc. are underway.
 Build
 -----
 
+You need some of the `-dev` libs installed such as `libpam-dev` and `libudev-dev`.
+
 Inside this dir,
 
 ```
